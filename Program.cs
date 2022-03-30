@@ -1,29 +1,36 @@
 ﻿using System;
 
-public class StackNode
+
+// Stack yaratma
+public class Stack
 {
 	public String veri;
-	public StackNode sonraki;
-	public StackNode(String veri, StackNode top)
+	public Stack sonraki;
+	public Stack(String veri, Stack top)
 	{
 		this.veri = veri;
 		this.sonraki = top;
 	}
 }
+
+// Stackin en üst değeri ve sayaç
 public class MyStack
 {
-	public StackNode top;
+	public Stack top;
 	public int sayac;
 	public MyStack()
 	{
-		this.top = null;
+		this.top = null; // ilk değere null verildi.
 		this.sayac = 0;
 	}
 	
+	// Stackin boyunu dönen fonksiyon
 	public int size()
 	{
 		return this.sayac;
 	}
+
+	// Stack boş mu kontrolü
 	public bool isEmpty()
 	{
 		if (this.size() > 0)
@@ -35,15 +42,17 @@ public class MyStack
 			return true;
 		}
 	}
-	// Stack'e yeni eleman ekleme
+	// Stack'e yeni eleman ekleme (push)
 	public void push(String veri)
 	{
-		this.top = new StackNode(veri, this.top);
+		this.top = new Stack(veri, this.top); // Yeni eleman yaratıldı ve top değeri o oldu.
 		this.sayac++;
 	}
+
+	// Stack'den eleman çekme (pop)
 	public String pop()
 	{
-		var temp = "";
+		var temp = ""; // geçici değişken tanımlandı.
 		if (this.isEmpty() == false)
 		{
 			temp = this.top.veri;
@@ -52,6 +61,8 @@ public class MyStack
 		}
 		return temp;
 	}
+
+	// Stackin en tepesindeki değeri dönen fonksiyon
 	public String peek()
 	{
 		if (!this.isEmpty())
@@ -64,7 +75,7 @@ public class MyStack
 		}
 	}
 }
-public class Conversion
+public class Donusum
 {
 	// operatör kontrolü
 	public bool isOperator(char text)
@@ -95,54 +106,54 @@ public class Conversion
 		// boyut alınır
 		var size = prefix.Length;
 		// stack yaratılır
-		var s = new MyStack();
+		var a = new MyStack();
 		var ek = "";
-		var op1 = "";
-		var op2 = "";
-		var isValid = true;
+		var operator1 = "";
+		var operator2 = "";
+		var gecerli = true;
 		for (var i = size - 1; i >= 0; i--)
 		{
 			if (this.isOperator(prefix[i]))
 			{
-				if (s.size() > 1)
+				if (a.size() > 1)
 				{
-					op1 = s.pop();
-					op2 = s.pop();
-					ek = "(" + op1 + prefix[i] + op2 + ")";
-					s.push(ek);
+					operator1 = a.pop();
+					operator2 = a.pop();
+					ek = "(" + operator1 + prefix[i] + operator2 + ")";
+					a.push(ek);
 				}
 				else
 				{
-					isValid = false;
+					gecerli = false;
 				}
 			}
 			else if (this.isOperands(prefix[i]))
 			{
 				ek = prefix[i].ToString();
-				s.push(ek);
+				a.push(ek);
 			}
 			else
 			{
 				// geçersiz operatör veya işlenen 
-				isValid = false;
+				gecerli = false;
 			}
 		}
-		if (isValid == false)
+		if (gecerli == false)
 		{
 			Console.WriteLine("Geçersiz prefix : " + prefix);
 		}
 		else
 		{
-			Console.WriteLine(" Infix  : " + s.pop());
+			Console.WriteLine(" Infix  : " + a.pop());
 		}
 	}
-	public static void Main(String[] args)
+	public static void Main()
 	{
-		var task = new Conversion();
+		var gorev = new Donusum();
 		Console.Write("Prefix ifade gir: ");
 		var prefix = Convert.ToString(Console.ReadLine());
 		Console.WriteLine();
-		task.prefixToinfix(prefix);
+		gorev.prefixToinfix(prefix);
 		Console.ReadKey();
 	}
 }
